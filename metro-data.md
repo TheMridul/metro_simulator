@@ -1,9 +1,9 @@
 DELHI METRO STATION DATA
 ========================
 Data for Blue Line and Magenta Line (with distances, inter-station travel times, and interchange lines).
-Note: Travel time is the approximate time from the previous station.
+Note: Travel time is the approximate time from the previous station. Travel times for the Blue Line Branch were unavailable in the source data.
 
-BLUE LINE STATIONS (Dwarka Sector 21 to Noida Electronic City)
+## 🟦 BLUE LINE STATIONS (Dwarka Sector 21 to Noida Electronic City)
 
 | ID | Station | Distance (km) | Travel Time from Previous (min) | Interchange Line(s) |
 |:---|:---|:---|:---|:---|
@@ -45,27 +45,41 @@ BLUE LINE STATIONS (Dwarka Sector 21 to Noida Electronic City)
 | 36b | Indraprastha | 33.4 | 0.0 | — |
 | 37b | Purana Quila | 35.2 | 3.6 | — |
 | 38b | Yamuna Bank | 35.2 | 0.0 | *Blue Line Branch* |
-| 39b | Akshardham | 36.5 | 2.6 | — |
-| 40b | Akshardham | 38.3 | 3.6 | — |
-| 41b | Mayur Vihar Phase-1 | 38.3 | 0.0 | Pink |
-| 42b | Mayur Vihar Extention | 39.5 | 2.4 | — |
-| 43b | New Ashok Nagar | 40.4 | 1.8 | — |
-| 44b | Noida Sector 15 | 41.4 | 2.0 | — |
-| 45b | Noida Sector 16 | 42.5 | 2.2 | — |
-| 46b | Noida Sector 18 | 43.6 | 2.2 | — |
-| 47b | **Botanical Garden** | 44.7 | 2.2 | **Magenta** |
-| 48b | Golf Course | 45.9 | 2.4 | — |
-| 49b | Noida City Center | 47.2 | 2.6 | — |
-| 50b | Noida Sector 34 | 48.1 | 1.8 | — |
-| 51b | Noida Sector 52 | 49.3 | 2.4 | Aqua |
-| 52b | Noida Sector 61 | 50.5 | 2.4 | — |
-| 53b | Noida Sector 59 | 51.5 | 2.0 | — |
-| 54b | Noida Sector 62 | 52.7 | 2.4 | — |
-| 55b | Noida Electronic City | 53.9 | 2.4 | — |
+| 39b | **Akshardham** | **36.5** | **2.6** | — |
+| **40b** | **Mayur Vihar Phase-1** | **38.3** | **3.6** | **Pink** |
+| 41b | Mayur Vihar Extention | 39.5 | 2.4 | — |
+| 42b | New Ashok Nagar | 40.4 | 1.8 | — |
+| 43b | Noida Sector 15 | 41.4 | 2.0 | — |
+| 44b | Noida Sector 16 | 42.5 | 2.2 | — |
+| 45b | Noida Sector 18 | 43.6 | 2.2 | — |
+| 46b | **Botanical Garden** | 44.7 | 2.2 | **Magenta** |
+| 47b | Golf Course | 45.9 | 2.4 | — |
+| 48b | Noida City Center | 47.2 | 2.6 | — |
+| 49b | Noida Sector 34 | 48.1 | 1.8 | — |
+| 50b | Noida Sector 52 | 49.3 | 2.4 | Aqua |
+| 51b | Noida Sector 61 | 50.5 | 2.4 | — |
+| 52b | Noida Sector 59 | 51.5 | 2.0 | — |
+| 53b | Noida Sector 62 | 52.7 | 2.4 | — |
+| 54b | Noida Electronic City | 53.9 | 2.4 | — |
 
 ---
 
-## MAGENTA LINE STATIONS
+## 🟦 BLUE LINE BRANCH STATIONS (Yamuna Bank to Vaishali)
+
+| ID | Station | Distance (km) | Travel Time from Previous (min) | Interchange Line(s) |
+|:---|:---|:---|:---|:---|
+| 1bb | Yamuna Bank | 0.0 | — | *Blue Line Main* |
+| 2bb | Laxmi Nagar | 1.3 | — | — |
+| 3bb | Nirman Vihar | 2.4 | — | — |
+| 4bb | Preet Vihar | 3.4 | — | — |
+| 5bb | Karkar Duma | 4.6 | — | Pink |
+| 6bb | Anand Vihar | 5.7 | — | Pink |
+| 7bb | Kaushambi | 6.5 | — | — |
+| 8bb | Vaishali | 8.1 | — | — |
+
+---
+
+## 🟣 MAGENTA LINE STATIONS
 
 | ID | Station | Distance (km) | Travel Time from Previous (min) | Interchange Line(s) |
 |:---|:---|:---|:---|:---|
@@ -94,6 +108,3 @@ BLUE LINE STATIONS (Dwarka Sector 21 to Noida Electronic City)
 | 23m | Kalindi Kunj | 29.8 | 2.8 | — |
 | 24m | Okhla Bird Sanctuary | 31.4 | 3.2 | — |
 | 25m | **Botanical Garden** | 33.1 | 3.4 | **Blue** |
-
----
-
