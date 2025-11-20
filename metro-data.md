@@ -1,7 +1,7 @@
 DELHI METRO STATION DATA
 ========================
 Data for Blue Line and Magenta Line (with distances, inter-station travel times, and interchange lines).
-Note: Travel time is the approximate time from the previous station. Travel times for the Blue Line Branch were unavailable in the source data.
+Note: Travel time is the approximate time from the previous station. Travel times for the Blue Line Branch (Line 4) are **estimated** based on the total journey time of approximately 16 minutes.
 
 ## 🟦 BLUE LINE STATIONS (Dwarka Sector 21 to Noida Electronic City)
 
@@ -45,8 +45,8 @@ Note: Travel time is the approximate time from the previous station. Travel time
 | 36b | Indraprastha | 33.4 | 0.0 | — |
 | 37b | Purana Quila | 35.2 | 3.6 | — |
 | 38b | Yamuna Bank | 35.2 | 0.0 | *Blue Line Branch* |
-| 39b | **Akshardham** | **36.5** | **2.6** | — |
-| **40b** | **Mayur Vihar Phase-1** | **38.3** | **3.6** | **Pink** |
+| 39b | Akshardham | 36.5 | 2.6 | — |
+| 40b | Mayur Vihar Phase-1 | 38.3 | 3.6 | Pink |
 | 41b | Mayur Vihar Extention | 39.5 | 2.4 | — |
 | 42b | New Ashok Nagar | 40.4 | 1.8 | — |
 | 43b | Noida Sector 15 | 41.4 | 2.0 | — |
@@ -66,16 +66,16 @@ Note: Travel time is the approximate time from the previous station. Travel time
 
 ## 🟦 BLUE LINE BRANCH STATIONS (Yamuna Bank to Vaishali)
 
-| ID | Station | Distance (km) | Travel Time from Previous (min) | Interchange Line(s) |
+| ID | Station | Distance (km) | Estimated Travel Time from Previous (min) | Interchange Line(s) |
 |:---|:---|:---|:---|:---|
-| 1bb | Yamuna Bank | 0.0 | — | *Blue Line Main* |
-| 2bb | Laxmi Nagar | 1.3 | — | — |
-| 3bb | Nirman Vihar | 2.4 | — | — |
-| 4bb | Preet Vihar | 3.4 | — | — |
-| 5bb | Karkar Duma | 4.6 | — | Pink |
-| 6bb | Anand Vihar | 5.7 | — | Pink |
-| 7bb | Kaushambi | 6.5 | — | — |
-| 8bb | Vaishali | 8.1 | — | — |
+| 1bb | Yamuna Bank | 0.0 | 0.0 | *Blue Line Main* |
+| 2bb | Laxmi Nagar | 1.3 | 2.6 | — |
+| 3bb | Nirman Vihar | 2.4 | 2.2 | — |
+| 4bb | Preet Vihar | 3.4 | 1.9 | — |
+| 5bb | Karkar Duma | 4.6 | 2.4 | Pink |
+| 6bb | Anand Vihar | 5.7 | 2.2 | Pink |
+| 7bb | Kaushambi | 6.5 | 1.6 | — |
+| 8bb | Vaishali | 8.1 | 3.1 | — |
 
 ---
 
