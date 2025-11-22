@@ -2,98 +2,98 @@ DELHI METRO STATION DATA
 
 BLUE LINE STATIONS (Dwarka Sector 21 to Noida Electronic City)
 
-ID | Station Name | Distance (km) | Travel Time from Previous (min) | Interchange Line(s)
+ID | Station Name | Distance (km) | Travel Time from Previous (min:ss) | Interchange Line(s)
 
-1b | Dwarka Sector 21 | 0.0 | 0.0 | Orange
-2b | Dwarka Sector 8 | 1.7 | 3.4 | —
-3b | Dwarka Sector 9 | 2.7 | 2.0 | —
-4b | Dwarka Sector 10 | 3.8 | 2.2 | —
-5b | Dwarka Sector 11 | 4.8 | 2.0 | —
-6b | Dwarka Sector 12 | 5.8 | 2.0 | —
-7b | Dwarka Sector 13 | 6.7 | 1.8 | —
-8b | Dwarka Sector 14 | 7.6 | 1.8 | —
-9b | Dwarka | 9.1 | 3.0 | Gray
-10b | Dwarka Mor | 10.2 | 2.2 | —
-11b | Nawada | 11.4 | 2.4 | —
-12b | Uttam Nagar West | 12.4 | 2.0 | —
-13b | Uttam Nagar East | 13.4 | 2.0 | —
-14b | Janak Puri West | 14.7 | 2.6 | Magenta
-15b | Janak Puri East | 15.7 | 2.0 | —
-16b | Tilak Nagar | 16.7 | 2.0 | —
-17b | Subhash Nagar | 17.6 | 1.8 | —
-18b | Tagore Garden | 18.5 | 1.8 | —
-19b | Rajouri Garden | 19.6 | 2.2 | Pink
-20b | Ramesh Nagar | 20.6 | 2.0 | —
-21b | Moti Nagar | 21.8 | 2.4 | —
-22b | Kirti Nagar | 22.8 | 2.0 | Green
-23b | Shadipur | 23.5 | 1.4 | —
-24b | Patel Nagar | 24.8 | 2.6 | —
-25b | Rajendra Place | 25.7 | 1.8 | —
-26b | Karol Bagh | 26.7 | 2.0 | —
-27b | Jhandewalan | 27.9 | 2.4 | —
-28b | R K Ashram Marg | 28.9 | 2.0 | —
-29b | Rajiv Chowk | 30.1 | 2.4 | Yellow
-30b | Barakhamba | 30.8 | 1.4 | —
-31b | Mandi House | 31.8 | 2.0 | Violet
-32b | Supreme Court (Pragati Maidan) | 32.6 | 1.6 | —
-33b | Indraprastha | 33.4 | 1.6 | —
-34b | Yamuna Bank | 35.2 | 3.6 | Blue Line Branch
-35b | Akshardham | 36.5 | 2.6 | —
-36b | Mayur Vihar Phase-1 | 38.3 | 3.6 | Pink
-37b | Mayur Vihar Extention | 39.5 | 2.4 | —
-38b | New Ashok Nagar | 40.4 | 1.8 | —
-39b | Noida Sector 15 | 41.4 | 2.0 | —
-40b | Noida Sector 16 | 42.5 | 2.2 | —
-41b | Noida Sector 18 | 43.6 | 2.2 | —
-42b | Botanical Garden | 44.7 | 2.2 | Magenta
-43b | Golf Course | 45.9 | 2.4 | —
-44b | Noida City Center | 47.2 | 2.6 | —
-45b | Noida Sector 34 | 48.1 | 1.8 | —
-46b | Noida Sector 52 | 49.3 | 2.4 | Aqua
-47b | Noida Sector 61 | 50.5 | 2.4 | —
-48b | Noida Sector 59 | 51.5 | 2.0 | —
-49b | Noida Sector 62 | 52.7 | 2.4 | —
-50b | Noida Electronic City | 53.9 | 2.4 | —
+1b | Dwarka Sector 21 | 0.0 | 0:00 | Orange
+2b | Dwarka Sector 8 | 1.7 | 3:24 | —
+3b | Dwarka Sector 9 | 2.7 | 2:00 | —
+4b | Dwarka Sector 10 | 3.8 | 2:12 | —
+5b | Dwarka Sector 11 | 4.8 | 2:00 | —
+6b | Dwarka Sector 12 | 5.8 | 2:00 | —
+7b | Dwarka Sector 13 | 6.7 | 1:48 | —
+8b | Dwarka Sector 14 | 7.6 | 1:48 | —
+9b | Dwarka | 9.1 | 3:00 | Gray
+10b | Dwarka Mor | 10.2 | 2:12 | —
+11b | Nawada | 11.4 | 2:24 | —
+12b | Uttam Nagar West | 12.4 | 2:00 | —
+13b | Uttam Nagar East | 13.4 | 2:00 | —
+14b | Janak Puri West | 14.7 | 2:36 | Magenta
+15b | Janak Puri East | 15.7 | 2:00 | —
+16b | Tilak Nagar | 16.7 | 2:00 | —
+17b | Subhash Nagar | 17.6 | 1:48 | —
+18b | Tagore Garden | 18.5 | 1:48 | —
+19b | Rajouri Garden | 19.6 | 2:12 | Pink
+20b | Ramesh Nagar | 20.6 | 2:00 | —
+21b | Moti Nagar | 21.8 | 2:24 | —
+22b | Kirti Nagar | 22.8 | 2:00 | Green
+23b | Shadipur | 23.5 | 1:24 | —
+24b | Patel Nagar | 24.8 | 2:36 | —
+25b | Rajendra Place | 25.7 | 1:48 | —
+26b | Karol Bagh | 26.7 | 2:00 | —
+27b | Jhandewalan | 27.9 | 2:24 | —
+28b | R K Ashram Marg | 28.9 | 2:00 | —
+29b | Rajiv Chowk | 30.1 | 2:24 | Yellow
+30b | Barakhamba | 30.8 | 1:24 | —
+31b | Mandi House | 31.8 | 2:00 | Violet
+32b | Supreme Court (Pragati Maidan) | 32.6 | 1:36 | —
+33b | Indraprastha | 33.4 | 1:36 | —
+34b | Yamuna Bank | 35.2 | 3:36 | Blue Line Branch
+35b | Akshardham | 36.5 | 2:36 | —
+36b | Mayur Vihar Phase-1 | 38.3 | 3:36 | Pink
+37b | Mayur Vihar Extention | 39.5 | 2:24 | —
+38b | New Ashok Nagar | 40.4 | 1:48 | —
+39b | Noida Sector 15 | 41.4 | 2:00 | —
+40b | Noida Sector 16 | 42.5 | 2:12 | —
+41b | Noida Sector 18 | 43.6 | 2:12 | —
+42b | Botanical Garden | 44.7 | 2:12 | Magenta
+43b | Golf Course | 45.9 | 2:24 | —
+44b | Noida City Center | 47.2 | 2:36 | —
+45b | Noida Sector 34 | 48.1 | 1:48 | —
+46b | Noida Sector 52 | 49.3 | 2:24 | Aqua
+47b | Noida Sector 61 | 50.5 | 2:24 | —
+48b | Noida Sector 59 | 51.5 | 2:00 | —
+49b | Noida Sector 62 | 52.7 | 2:24 | —
+50b | Noida Electronic City | 53.9 | 2:24 | —
 
 BLUE LINE BRANCH STATIONS (Yamuna Bank to Vaishali)
 
-ID | Station Name | Distance (km) | Travel Time from Previous (min) | Interchange Line(s)
+ID | Station Name | Distance (km) | Travel Time from Previous (min:ss) | Interchange Line(s)
 
-1bb | Yamuna Bank | 0.0 | 0.0 | Blue Line Main
-2bb | Laxmi Nagar | 1.3 | 2.6 | —
-3bb | Nirman Vihar | 2.4 | 2.2 | —
-4bb | Preet Vihar | 3.4 | 1.9 | —
-5bb | Karkar Duma | 4.6 | 2.4 | Pink
-6bb | Anand Vihar | 5.7 | 2.2 | Pink
-7bb | Kaushambi | 6.5 | 1.6 | —
-8bb | Vaishali | 8.1 | 3.1 | —
+1bb | Yamuna Bank | 0.0 | 0:00 | Blue Line Main
+2bb | Laxmi Nagar | 1.3 | 2:36 | —
+3bb | Nirman Vihar | 2.4 | 2:12 | —
+4bb | Preet Vihar | 3.4 | 1:54 | —
+5bb | Karkar Duma | 4.6 | 2:24 | Pink
+6bb | Anand Vihar | 5.7 | 2:12 | Pink
+7bb | Kaushambi | 6.5 | 1:36 | —
+8bb | Vaishali | 8.1 | 3:06 | —
 
 MAGENTA LINE STATIONS
 
-ID | Station Name | Distance (km) | Travel Time from Previous (min) | Interchange Line(s)
+ID | Station Name | Distance (km) | Travel Time from Previous (min:ss) | Interchange Line(s)
 
-1m | Janak Puri West | 0.0 | 0.0 | Blue
-2m | Dabri Mor - Janakpuri South | 2.0 | 4.0 | —
-3m | Dashrath Puri | 3.1 | 2.2 | —
-4m | Palam | 4.6 | 3.0 | —
-5m | Sadar Bazaar Cantonment | 7.2 | 5.2 | —
-6m | Terminal 1 IGI Airport | 8.9 | 3.4 | —
-7m | Shankar Vihar | 10.7 | 3.6 | —
-8m | Vasant Vihar | 12.8 | 4.2 | —
-9m | Munirka | 14.0 | 2.4 | —
-10m | RK Puram | 15.4 | 2.8 | —
-11m | IIT Delhi | 16.3 | 1.8 | —
-12m | Hauz Khas | 17.5 | 2.4 | Yellow
-13m | Panchsheel Park | 19.0 | 3.0 | —
-14m | Chirag Delhi | 19.9 | 1.8 | —
-15m | Greater Kailash | 20.8 | 1.8 | —
-16m | Nehru Enclave | 22.1 | 2.6 | —
-17m | Kalkaji Mandir | 23.0 | 1.8 | Violet
-18m | Okhla NSIC | 23.8 | 1.6 | —
-19m | Sukhdev Vihar | 24.9 | 2.2 | —
-20m | JAMIA MILLIA ISLAMIA | 26.1 | 2.4 | —
-21m | Okhla Vihar | 26.6 | 1.0 | —
-22m | Jasola Vihar Shaheen Bagh | 28.4 | 3.6 | —
-23m | Kalindi Kunj | 29.8 | 2.8 | —
-24m | Okhla Bird Sanctuary | 31.4 | 3.2 | —
-25m | Botanical Garden | 33.1 | 3.4 | Blue  
+1m | Janak Puri West | 0.0 | 0:00 | Blue
+2m | Dabri Mor - Janakpuri South | 2.0 | 4:00 | —
+3m | Dashrath Puri | 3.1 | 2:12 | —
+4m | Palam | 4.6 | 3:00 | —
+5m | Sadar Bazaar Cantonment | 7.2 | 5:12 | —
+6m | Terminal 1 IGI Airport | 8.9 | 3:24 | —
+7m | Shankar Vihar | 10.7 | 3:36 | —
+8m | Vasant Vihar | 12.8 | 4:12 | —
+9m | Munirka | 14.0 | 2:24 | —
+10m | RK Puram | 15.4 | 2:48 | —
+11m | IIT Delhi | 16.3 | 1:48 | —
+12m | Hauz Khas | 17.5 | 2:24 | Yellow
+13m | Panchsheel Park | 19.0 | 3:00 | —
+14m | Chirag Delhi | 19.9 | 1:48 | —
+15m | Greater Kailash | 20.8 | 1:48 | —
+16m | Nehru Enclave | 22.1 | 2:36 | —
+17m | Kalkaji Mandir | 23.0 | 1:48 | Violet
+18m | Okhla NSIC | 23.8 | 1:36 | —
+19m | Sukhdev Vihar | 24.9 | 2:12 | —
+20m | JAMIA MILLIA ISLAMIA | 26.1 | 2:24 | —
+21m | Okhla Vihar | 26.6 | 1:00 | —
+22m | Jasola Vihar Shaheen Bagh | 28.4 | 3:36 | —
+23m | Kalindi Kunj | 29.8 | 2:48 | —
+24m | Okhla Bird Sanctuary | 31.4 | 3:12 | —
+25m | Botanical Garden | 33.1 | 3:24 | Blue  
