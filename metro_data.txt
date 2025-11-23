@@ -72,29 +72,30 @@ MAGENTA LINE STATIONS
 
 ID | Station Name | Distance (km) | Travel Time from Previous (min:ss) | Interchange Line(s)
 
-1m | Janak Puri West | 0.0 | 0:00 | Blue
-2m | Dabri Mor-Janakpuri South | 2.0 | 4:00 | 
-3m | Dashrath Puri | 3.1 | 2:12 | 
-4m | Palam | 4.6 | 3:00 | 
-5m | Sadar Bazaar Cantonment | 7.2 | 5:12 | 
-6m | Terminal 1 IGI Airport | 8.9 | 3:24 | 
-7m | Shankar Vihar | 10.7 | 3:36 | 
-8m | Vasant Vihar | 12.8 | 4:12 | 
-9m | Munirka | 14.0 | 2:24 | 
-10m | RK Puram | 15.4 | 2:48 | 
-11m | IIT Delhi | 16.3 | 1:48 | 
-12m | Hauz Khas | 17.5 | 2:24 | Yellow
-13m | Panchsheel Park | 19.0 | 3:00 | 
-14m | Chirag Delhi | 19.9 | 1:48 | 
-15m | Greater Kailash | 20.8 | 1:48 | 
-16m | Nehru Enclave | 22.1 | 2:36 | 
-17m | Kalkaji Mandir | 23.0 | 1:48 | Violet
-18m | Okhla NSIC | 23.8 | 1:36 | 
-19m | Sukhdev Vihar | 24.9 | 2:12 | 
-20m | JAMIA MILLIA ISLAMIA | 26.1 | 2:24 | 
-21m | Okhla Vihar | 26.6 | 1:00 | 
-22m | Jasola Vihar Shaheen Bagh | 28.4 | 3:36 | 
-23m | Kalindi Kunj | 29.8 | 2:48 | 
-24m | Okhla Bird Sanctuary | 31.4 | 3:12 | 
-25m | Botanical Garden | 33.1 | 3:24 | Blue  
+1m | Krishna Park Extension | 0.0 | 0:00 |
+2m | Janak Puri West | 2.8 | 5:36 | Blue
+3m | Dabri Mor-Janakpuri South | 4.8 | 4:00 |
+4m | Dashrath Puri | 5.9 | 2:12 |
+5m | Palam | 7.4 | 3:00 |
+6m | Sadar Bazaar Cantonment | 10.0 | 5:12 |
+7m | Terminal 1 IGI Airport | 11.7 | 3:24 |
+8m | Shankar Vihar | 13.5 | 3:36 |
+9m | Vasant Vihar | 15.6 | 4:12 |
+10m | Munirka | 16.8 | 2:24 |
+11m | RK Puram | 18.2 | 2:48 |
+12m | IIT Delhi | 19.1 | 1:48 |
+13m | Hauz Khas | 20.3 | 2:24 | Yellow
+14m | Panchsheel Park | 21.8 | 3:00 |
+15m | Chirag Delhi | 22.7 | 1:48 |
+16m | Greater Kailash | 23.6 | 1:48 |
+17m | Nehru Enclave | 24.9 | 2:36 |
+18m | Kalkaji Mandir | 25.8 | 1:48 | Violet
+19m | Okhla NSIC | 26.6 | 1:36 |
+20m | Sukhdev Vihar | 27.7 | 2:12 |
+21m | JAMIA MILLIA ISLAMIA | 28.9 | 2:24 |
+22m | Okhla Vihar | 29.4 | 1:00 |
+23m | Jasola Vihar Shaheen Bagh | 31.2 | 3:36 |
+24m | Kalindi Kunj | 32.6 | 2:48 |
+25m | Okhla Bird Sanctuary | 34.2 | 3:12 |
+26m | Botanical Garden | 35.9 | 3:24 | Blue  
 [END MAGENTA]
