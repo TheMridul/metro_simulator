@@ -2,19 +2,19 @@ from datetime import datetime,timedelta
 
 def readSection(filename, start_marker, end_marker):
     stations = []
-    in_section = False
+    inSection = False
     
     with open(filename, 'r') as file:
         for line in file:
             line = line.strip()            
             if start_marker in line:
-                in_section = True
+                inSection = True
                 continue
             if end_marker in line:
-                in_section = False
+                inSection = False
                 break
 
-            if in_section:
+            if inSection:
                 # spliting to get req. data
                 if "|" in line and len(line) > 0 and line[0].isalnum():
                     columns = line.split('|')
@@ -41,14 +41,14 @@ def readSection(filename, start_marker, end_marker):
                         })
     return stations
 
-stations_blue_main = readSection("metro_data.txt", "BLUE LINE STATIONS", "BLUE LINE BRANCH STATIONS")
-stations_blue_branch = readSection("metro_data.txt", "BLUE LINE BRANCH STATIONS", "[END BLUE]")
-stations_magenta = readSection("metro_data.txt", "MAGENTA LINE STATIONS", "[END MAGENTA]")
-
+stationBlueMain = readSection("metro_data.txt", "BLUE LINE STATIONS", "BLUE LINE BRANCH STATIONS")
+stationBlueBranch = readSection("metro_data.txt", "BLUE LINE BRANCH STATIONS", "[END BLUE]")
+stationMagenta = readSection("metro_data.txt", "MAGENTA LINE STATIONS", "[END MAGENTA]")
+# print(stationBlueBranch)
 
 # inputs
-def get_user_selection():
-    print("\n--- Select Line ---")
+def stationSelectoffset():
+    print("Select Line ")
     print("1. Blue Line (Dwarka Sec 21 - Noida Elec. City)")
     print("2. Blue Branch (Yamuna Bank - Vaishali)")
     print("3. Magenta Line (Janak Puri West - Botanical Garden)")
@@ -56,108 +56,101 @@ def get_user_selection():
     while True:
         choice = input("Enter Choice (1-3): ").strip()
         if choice == '1':
-            active_line = stations_blue_main
+            activeLine = stationBlueMain
             break
         elif choice == '2':
-            active_line = stations_blue_branch
+            activeLine = stationBlueBranch
             break
         elif choice == '3':
-            active_line = stations_magenta
+            activeLine = stationMagenta
             break
         print("Invalid choice. Try again.")
 
-    start_station = active_line[0]['name']
-    end_station = active_line[-1]['name']
+    startStation = activeLine[0]['name']
+    endStation = activeLine[-1]['name']
     
-    print(f"\n--- Select Direction ---")
-    print(f"1. Down: {start_station} -> {end_station}")
-    print(f"2. Up:   {end_station} -> {start_station}")
+    print(f" Select Direction ")
+    print(f"1. Down: {startStation} -> {endStation}")
+    print(f"2. Up:   {endStation} -> {startStation}")
     
     direction = input("Enter Direction (1 or 2): ").strip()
     
-    print(f"\n--- Stations on this Line ---")
-    for s in active_line:
+    print(f" Stations on this Line ")
+    for s in activeLine:
         print(f"{s['id']}: {s['name']}")
     
     target_id = input("Enter your Station ID (e.g., 1b): ").strip().lower()
-    # Find the index of the selected station
-    target_index = -1
-    for idx, s in enumerate(active_line):
+    # index of the selected station
+    reqIndex = -1
+    for idx, s in enumerate(activeLine):
         if s['id'].lower() == target_id:
-            target_index = idx
+            reqIndex = idx
             break
-    if target_index == -1:
+    if reqIndex == -1:
         return None, None
     # Time Offset
     cumuSec = 0
     # Down
     if direction == '1':  
         # Add time of all previous stations up to current
-        for i in range(1, target_index + 1):
-            cumuSec += active_line[i]['time']
+        for i in range(1, reqIndex + 1):
+            cumuSec += activeLine[i]['time']
     else: 
         # Up
-        for i in range(target_index + 1, len(active_line)):
-            cumuSec += active_line[i]['time']
+        for i in range(reqIndex + 1, len(activeLine)):
+            cumuSec += activeLine[i]['time']
             
-    return active_line[target_index]['name'], cumuSec
+    return activeLine[reqIndex]['name'], cumuSec
 
-# --- 3. Timing Logic ---
+#  timing logic 
 
-def calculate_timings(offsetSec):
+def calcTimings(offsetSec):
     now = datetime.now()
     
     # service hours
-    service_start = now.replace(hour=6, minute=0, second=0, microsecond=0)
-    service_end = now.replace(hour=23, minute=0, second=0, microsecond=0)
+    serviceStart = now.replace(hour=6, minute=0, second=0, microsecond=0)
+    serviceEnd = now.replace(hour=23, minute=0, second=0, microsecond=0)
     
     # offset adjusting
-    first_arrival = service_start + timedelta(seconds=offsetSec)
-    last_arrival = service_end + timedelta(seconds=offsetSec)
+    firstArrival = serviceStart + timedelta(seconds=offsetSec)
+    lastArrival = serviceEnd + timedelta(seconds=offsetSec)
     
-    if now > last_arrival:
+    if now > lastArrival:
         return ["No service available"]
         
-    if now < first_arrival:
-        next_metro = first_arrival
-    else:
-        # freq for peak and off peak hrs
-        hour = now.hour
-        if (8 <= hour < 10) or (17 <= hour < 19):
-            freq = 4
+    def getFreq(time):
+        h = time.hour
+        if (8 <= h < 10) or (17 <= h < 19):
+            return 4 
         else:
-            freq = 8
-            
-        # Calc next metro
-        time_diff = now - first_arrival
-        minutes_passed = time_diff.total_seconds() / 60
-        cycles = int(minutes_passed // freq)
-        minutes_to_add = (cycles + 1) * freq
-        
-        next_metro = first_arrival + timedelta(minutes=minutes_to_add)
+            return 8
 
-    # Generate next 3 metros
+    # next metro afterr first arrival using changing frequencies
+    if now <= firstArrival:
+        nextMetro = firstArrival
+    else:
+        cur = firstArrival
+        while cur <= now:
+            cur += timedelta(minutes=getFreq(cur))
+        nextMetro = cur
+
+    # next 3 metros
     timings = []
     for _ in range(3):
-        if next_metro > last_arrival:
+        if nextMetro > lastArrival:
             timings.append("End of Service")
             break
-        timings.append(next_metro.strftime("%H:%M"))
-        
-        # Advance to next train
-        h = next_metro.hour
-        next_freq = 4 if (8 <= h < 10) or (17 <= h < 19) else 8
-        next_metro += timedelta(minutes=next_freq)
-        
+        timings.append(nextMetro.strftime("%H:%M"))
+        nextMetro += timedelta(minutes=getFreq(nextMetro))
     return timings
 
-stationName, stationOffset = get_user_selection()
+stationName, stationOffset = stationSelectoffset()
 
 if stationName:
-    print(f"\nStation: {stationName}")
-    print(f"Travel time from Line Origin: {stationOffset // 60} min {stationOffset % 60} sec")
-    
-    timings = calculate_timings(stationOffset)
+    print(f"Station: {stationName}")
+    # print(f"Travel time from Line Origin: {stationOffset // 60} min {stationOffset % 60} sec")
+
+    timings = calcTimings(stationOffset)
     if "Service" in timings[0]:
         print(timings[0])
     else:
