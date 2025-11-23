@@ -1,123 +1,168 @@
 from datetime import datetime,timedelta
-now = datetime.now()
-timeNow=now.strftime("%H:%M")
 
-time6AM=now.replace(hour=6,minute=0,second=0,microsecond=0)
-time8AM=now.replace(hour=8,minute=0,microsecond=0,second=0)
-time10AM=now.replace(hour=10,minute=0,microsecond=0,second=0)
-time5PM=now.replace(hour=17,minute=0,microsecond=0,second=0)
-time7PM=now.replace(hour=19,minute=0,microsecond=0,second=0)
-time11PM=now.replace(hour=23,minute=0,microsecond=0,second=0)
-
-def read_section(filename, start_marker, end_marker):
-    stations=[]
-    inSection = False 
+def readSection(filename, start_marker, end_marker):
+    stations = []
+    in_section = False
     
     with open(filename, 'r') as file:
         for line in file:
+            line = line.strip()            
             if start_marker in line:
-                inSection = True
-            
+                in_section = True
+                continue
             if end_marker in line:
-                inSection = False
-                break 
-            
-            if inSection:
-                colunms= line.split('|') 
-                if len(colunms)>1:
-                    target_part = colunms[0] + "|" + colunms[1]
-                    stations.append(target_part)
+                in_section = False
+                break
+
+            if in_section:
+                # spliting to get req. data
+                if "|" in line and len(line) > 0 and line[0].isalnum():
+                    columns = line.split('|')
+                    if len(columns) >= 4:
+                        s_id = columns[0].strip()
+                        stationName = columns[1].strip()
+                        
+                        # time calc
+                        time = columns[3].strip()
+                        s_time = 0
+                        if ":" in time:
+                            parts = time.split(':')
+                            try:
+                                minutes = int(parts[0])
+                                seconds = int(parts[1])
+                                s_time = (minutes * 60) + seconds
+                            except ValueError:
+                                s_time = 0
+
+                        stations.append({
+                            "id": s_id, 
+                            "name": stationName, 
+                            "time": s_time
+                        })
     return stations
 
-stationsBlue= read_section("metro_data.txt", "BLUE LINE STATIONS", "[END BLUE]")
-stationsMagenta= read_section("metro_data.txt", "MAGENTA LINE STATIONS", "[END MAGENTA]")
+stations_blue_main = readSection("metro_data.txt", "BLUE LINE STATIONS", "BLUE LINE BRANCH STATIONS")
+stations_blue_branch = readSection("metro_data.txt", "BLUE LINE BRANCH STATIONS", "[END BLUE]")
+stations_magenta = readSection("metro_data.txt", "MAGENTA LINE STATIONS", "[END MAGENTA]")
 
-def stationSelector():
-    valid_lines = ["blue", "magenta"]
+
+# inputs
+def get_user_selection():
+    print("\n--- Select Line ---")
+    print("1. Blue Line (Dwarka Sec 21 - Noida Elec. City)")
+    print("2. Blue Branch (Yamuna Bank - Vaishali)")
+    print("3. Magenta Line (Janak Puri West - Botanical Garden)")
+    
     while True:
-        line = input("Enter the line (Blue or Magenta): ").strip().lower()
-        if line in valid_lines:
+        choice = input("Enter Choice (1-3): ").strip()
+        if choice == '1':
+            active_line = stations_blue_main
             break
-        print("Invalid line. Please enter 'Blue' or 'Magenta'.")
-    if line.lower() == "blue":
-        for station in stationsBlue:
-            print(station)
-    if line.lower() == "magenta":
-        for station in stationsMagenta:
-            print(station)
-    station = input("Enter Station using Ids:")
-    return station
+        elif choice == '2':
+            active_line = stations_blue_branch
+            break
+        elif choice == '3':
+            active_line = stations_magenta
+            break
+        print("Invalid choice. Try again.")
 
-def metroTimings(now):
-    tempTimings = []
-    timings=[]
-    if time6AM<=now<time8AM:
-        time = time6AM
-        while time < time8AM:
-            tempTimings.append(time)
-            time += timedelta(minutes=8)
-        for time in tempTimings:
-            if time>=now:
-                timings.append(time)
-        finalTimings = [t.strftime("%H:%M") for t in timings]
-        return finalTimings
+    start_station = active_line[0]['name']
+    end_station = active_line[-1]['name']
     
-    elif time8AM<=now<time10AM:
-        time = time8AM
-        while time < time10AM:
-            tempTimings.append(time)
-            time += timedelta(minutes=4)
-        for time in tempTimings:
-            if time>=now:
-                timings.append(time)
-        finalTimings = [t.strftime("%H:%M") for t in timings]
-        return finalTimings
+    print(f"\n--- Select Direction ---")
+    print(f"1. Down: {start_station} -> {end_station}")
+    print(f"2. Up:   {end_station} -> {start_station}")
     
-    elif time10AM<=now<time5PM:
-        if time10AM<=now<=time5PM:
-            time = time6AM
-        while time < time5PM:
-            tempTimings.append(time)
-            time += timedelta(minutes=8)
-        for time in tempTimings:
-            if time>=now:
-                timings.append(time)
-        finalTimings = [t.strftime("%H:%M") for t in timings]
-        return finalTimings
+    direction = input("Enter Direction (1 or 2): ").strip()
     
-    elif time5PM<=now<time7PM:
-        if time5PM<=now<=time7PM:
-            time = time5PM
-        while time < time7PM:
-            tempTimings.append(time)
-            time += timedelta(minutes=4)
-        for time in tempTimings:
-            if time >= now:
-                timings.append(time)
-        finalTimings = [t.strftime("%H:%M") for t in timings]
-        return finalTimings
+    print(f"\n--- Stations on this Line ---")
+    for s in active_line:
+        print(f"{s['id']}: {s['name']}")
     
-    elif time5PM<=now<time7PM:
-        if time5PM<=now<=time7PM:
-            time = time5PM
-        while time < time7PM:
-            tempTimings.append(time)
-            time += timedelta(minutes=4)
-        for time in tempTimings:
-            if time>=now:
-                timings.append(time)
-        finalTimings = [t.strftime("%H:%M") for t in timings]
-        return finalTimings
+    target_id = input("Enter your Station ID (e.g., 1b): ").strip().lower()
+    # Find the index of the selected station
+    target_index = -1
+    for idx, s in enumerate(active_line):
+        if s['id'].lower() == target_id:
+            target_index = idx
+            break
+    if target_index == -1:
+        return None, None
+    # Time Offset
+    cumuSec = 0
+    # Down
+    if direction == '1':  
+        # Add time of all previous stations up to current
+        for i in range(1, target_index + 1):
+            cumuSec += active_line[i]['time']
+    else: 
+        # Up
+        for i in range(target_index + 1, len(active_line)):
+            cumuSec += active_line[i]['time']
+            
+    return active_line[target_index]['name'], cumuSec
+
+# --- 3. Timing Logic ---
+
+def calculate_timings(offsetSec):
+    now = datetime.now()
+    
+    # service hours
+    service_start = now.replace(hour=6, minute=0, second=0, microsecond=0)
+    service_end = now.replace(hour=23, minute=0, second=0, microsecond=0)
+    
+    # offset adjusting
+    first_arrival = service_start + timedelta(seconds=offsetSec)
+    last_arrival = service_end + timedelta(seconds=offsetSec)
+    
+    if now > last_arrival:
+        return ["No service available"]
+        
+    if now < first_arrival:
+        next_metro = first_arrival
     else:
-        return "No service available"
+        # freq for peak and off peak hrs
+        hour = now.hour
+        if (8 <= hour < 10) or (17 <= hour < 19):
+            freq = 4
+        else:
+            freq = 8
+            
+        # Calc next metro
+        time_diff = now - first_arrival
+        minutes_passed = time_diff.total_seconds() / 60
+        cycles = int(minutes_passed // freq)
+        minutes_to_add = (cycles + 1) * freq
+        
+        next_metro = first_arrival + timedelta(minutes=minutes_to_add)
 
+    # Generate next 3 metros
+    timings = []
+    for _ in range(3):
+        if next_metro > last_arrival:
+            timings.append("End of Service")
+            break
+        timings.append(next_metro.strftime("%H:%M"))
+        
+        # Advance to next train
+        h = next_metro.hour
+        next_freq = 4 if (8 <= h < 10) or (17 <= h < 19) else 8
+        next_metro += timedelta(minutes=next_freq)
+        
+    return timings
 
-def modeSelector(now,sourceStation):
-    mode= input("Enter Mode, \n 'A' for Metro Timings, \n 'B' for Trip Plannar:")
-    if mode.lower()=="a":
-        return metroTimings(now)
-    elif mode.lower() == "b":
-        return "under development"
+stationName, stationOffset = get_user_selection()
 
-sourceStation= stationSelector()
-print(modeSelector(now,sourceStation))
+if stationName:
+    print(f"\nStation: {stationName}")
+    print(f"Travel time from Line Origin: {stationOffset // 60} min {stationOffset % 60} sec")
+    
+    timings = calculate_timings(stationOffset)
+    if "Service" in timings[0]:
+        print(timings[0])
+    else:
+        print(f"Next metro at {timings[0]}")
+        if len(timings) > 1:
+            print(f"Subsequent metros at {', '.join(timings[1:])}")
+else:
+    print("Station not found.")
