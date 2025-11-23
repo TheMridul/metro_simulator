@@ -1,16 +1,16 @@
 from datetime import datetime,timedelta
 
-def readSection(filename, start_marker, end_marker):
+def readSection(filename, start, end):
     stations = []
     inSection = False
     
     with open(filename, "r") as file:
         for line in file:
             line = line.strip()            
-            if start_marker in line:
+            if start in line:
                 inSection = True
                 continue
-            if end_marker in line:
+            if end in line:
                 inSection = False
                 break
 
@@ -56,12 +56,15 @@ def stationSelectoffset():
     while True:
         choice = input("Enter Choice (1-3): ").strip()
         if choice == "1":
+            choice = "Blue"
             activeLine = stationBlueMain
             break
         elif choice == "2":
+            choice = "Blue Branch"
             activeLine = stationBlueBranch
             break
         elif choice == "3":
+            choice = "Magenta"
             activeLine = stationMagenta
             break
         print("Invalid choice. Try again.")
@@ -87,12 +90,12 @@ def stationSelectoffset():
             reqIndex = idx
             break
     if reqIndex == -1:
-        return None, None
+        return None, None, None
     # Time Offset
     cumuSec = 0
     # Down
     if direction == "1":  
-        # Add time of all previous stations up to current
+        # Add time of all previous stations upto current
         for i in range(1, reqIndex + 1):
             cumuSec += activeLine[i]["time"]
     else: 
@@ -100,7 +103,7 @@ def stationSelectoffset():
         for i in range(reqIndex + 1, len(activeLine)):
             cumuSec += activeLine[i]["time"]
             
-    return activeLine[reqIndex]["name"], cumuSec
+    return activeLine[reqIndex]["name"], cumuSec, choice, direction
 
 #  timing logic 
 
@@ -150,12 +153,26 @@ def modeSelector():
         return mode
     else:
         print("Invalid choice. Try again.")
-        return modeSelector()
+
+def tripPlanner():
+    sourceStation, sourceOffset, sourceLine, sourcedirection = stationSelectoffset()
+    endStation, endOffset, endLine, enddirection = stationSelectoffset()
+    nextMetroTimings=calcTimings(sourceOffset)
+
+    if sourceLine == endLine and sourcedirection == enddirection:
+        diff=endOffset-sourceOffset
+        print("Journey Plan")
+        print(f"Start from {sourceStation} on {sourceLine} line.")
+        print(f"Next metro at {nextMetroTimings[0]}")
+        print(f"Trip from {sourceStation} to {endStation}")
+        print(f"Total time: {diff // 60} min {diff % 60} sec")
+    else:
+        print("Trip cannot be planned between different lines.")
 
 if modeSelector() == "1":
-    stationName, stationOffset = stationSelectoffset()
+    stationName, stationOffset, stationLine, direction = stationSelectoffset()
     if stationName:
-        print(f"Station: {stationName}")
+        print(f"Station: {stationName} on {stationLine} line.")
         # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
 
         timings = calcTimings(stationOffset)
@@ -167,5 +184,5 @@ if modeSelector() == "1":
                 print(f"Subsequent metros at {", ".join(timings[1:])}")
     else:
         print("Station not found.")
-elif modeSelector()=="2":
-    print("Under Development")
+else:
+    tripPlanner()
