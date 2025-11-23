@@ -85,7 +85,7 @@ def stationSelect(ask_direction=True):
     
     print(f" Stations on this Line ")
     for s in activeLine:
-        print(f"{s['id']}: {s['name']}")
+        print(f'{s["id"]}: {s["name"]}')
     
     targetID = input("Enter your Station ID (e.g., 1b): ").strip().lower()
     # index of the selected station
@@ -401,7 +401,7 @@ if selected_mode == "1":
         else:
             print(f"Next metro at {timings[0]}")
             if len(timings) > 1:
-                print(f"Subsequent metros at {", ".join(timings[1:])}")
+                print("Subsequent metros at " + ", ".join(timings[1:]))
     else:
         print("Station not found.")
 else:
