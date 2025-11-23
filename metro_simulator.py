@@ -164,7 +164,8 @@ def tripPlanner():
         print("Journey Plan")
         print(f"Start from {sourceStation} on {sourceLine} line.")
         print(f"Next metro at {nextMetroTimings[0]}")
-        print(f"Trip from {sourceStation} to {endStation}")
+        arrival_time = datetime.strptime(nextMetroTimings[0], "%H:%M") + timedelta(seconds=diff)
+        print(f"Arrive at {endStation} at {arrival_time.strftime('%H:%M')}")
         print(f"Total time: {diff // 60} min {diff % 60} sec")
     else:
         print("Trip cannot be planned between different lines.")
