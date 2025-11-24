@@ -2,6 +2,7 @@ from datetime import datetime,timedelta
 TRANSFER_TIME = 240  # 4 minutes in seconds
 SERVICE_START_HOUR = 6
 SERVICE_END_HOUR = 23
+now= datetime.now()
 # reading data from filr
 def readSection(filename, start, end):
     stations = []
@@ -90,7 +91,7 @@ def stationSelect(ask_direction=True):
     # index of the selected station
     reqIndex = -1
     for idx, s in enumerate(activeLine):
-        if s["id"] == targetID:
+        if s["id"].lower() == targetID:
             reqIndex = idx
             break
     
@@ -169,11 +170,11 @@ def calcTravelTime(line_data, start_name, end_name):
     if start_idx < end_idx: 
         for i in range(start_idx + 1, end_idx + 1):
             total_time += line_data[i]["time"]
-        return total_time, 1
+        return total_time, "Down"
     else: 
         for i in range(end_idx + 1, start_idx + 1):
             total_time += line_data[i]["time"]
-        return total_time, 2
+        return total_time, "Up"
 
 def customTime(now):
     print("\nSelect Time Option:")
@@ -208,7 +209,7 @@ def tripPlanner():
     print("Trip Planner ")
     print("Disclaimer: Transfer time at interchanges are approximated to 4 minutes.\n If source or destination is interchange station, please select lines accordingly.")
     # Get Time
-    startTime = customTime(datetime.now())
+    startTime = customTime(now)
     # Source
     activeLineS, reqIndexs, sourceLine, _ = stationSelect(ask_direction=False)
     if reqIndexs == -1: return
@@ -421,7 +422,7 @@ if selected_mode == "1":
         
         print(f"Station: {stationName} on {stationLine} line")
         # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
-        startTime = customTime(datetime.now())
+        startTime = customTime(now)
         timings = calcTimings(stationOffset, startTime)
         
         if "service" in timings[0]:
