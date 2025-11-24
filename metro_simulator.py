@@ -425,7 +425,7 @@ if selected_mode == "1":
         startTime = customTime(now)
         timings = calcTimings(stationOffset, startTime)
         
-        if "Service" in timings[0]:
+        if "service" in timings[0]:
             print(timings[0])
         else:
             print(f"Next metro at {timings[0]}")
