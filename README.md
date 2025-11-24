@@ -4,7 +4,7 @@ A command-line tool that simulates Delhi Metro timings and route planning across
 
 ## Features
 - Computes next metro arrival times for any station and direction.
-- Generates complete trip plans, including fastest route, direction detection, and transfer handling.
+- Generates complete trip plans, including route with minimum interchanges, direction detection, and transfer handling.
 - Accepts custom time input.
 - Handles service-hour rules.
 
@@ -12,7 +12,7 @@ A command-line tool that simulates Delhi Metro timings and route planning across
 - Operating window: 06:00 to 23:00.
 - If the current or input time is earlier than 06:00, the simulator returns the first possible metro of the day.
 
-## Data Sources
+## Meta Data Files
 Station datasets and timing data are loaded from:
 - metro_data.txt (a plain text file listing stations, line codes, and distances; each line follows the format: `<station_id>,<station_name>,<line_code>,<distance_from_start>`.  
   Example:  
