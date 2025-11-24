@@ -115,17 +115,17 @@ def calcOffset(activeLine, reqIndex, direction):
     return cumuSec
 
 #  timing logic 
-def calcTimings(offsetSec, start_time):
+def calcTimings(offsetSec, startTime):
     
     # service hours
-    serviceStart = start_time.replace(hour=SERVICE_START_HOUR, minute=0, second=0, microsecond=0)
-    serviceEnd = start_time.replace(hour=SERVICE_END_HOUR, minute=0, second=0, microsecond=0)
+    serviceStart = startTime.replace(hour=SERVICE_START_HOUR, minute=0, second=0, microsecond=0)
+    serviceEnd = startTime.replace(hour=SERVICE_END_HOUR, minute=0, second=0, microsecond=0)
     
     # offset adjusting
     firstArrival = serviceStart + timedelta(seconds=offsetSec)
     lastArrival = serviceEnd + timedelta(seconds=offsetSec)
     
-    if start_time > lastArrival:
+    if startTime > lastArrival:
         return ["No service available"]
         
     def getFreq(time):
@@ -136,11 +136,11 @@ def calcTimings(offsetSec, start_time):
             return 8
 
     # next metro afterr first arrival using changing frequencies
-    if start_time <= firstArrival:
+    if startTime <= firstArrival:
         nextMetro = firstArrival
     else:
         cur = firstArrival
-        while cur <= start_time:
+        while cur <= startTime:
             cur += timedelta(minutes=getFreq(cur))
         nextMetro = cur
 
@@ -195,6 +195,9 @@ def customTime(now):
 
 # mode selection
 def modeSelector():
+    print()
+    print("Welcome to Delhi Metro Simulator")
+    print("Select Mode:")
     mode= input("Enter 1 for Metro Timings, 2 for Trip Planner: ").strip()
     if mode in ["1", "2"]:
         return mode
@@ -206,16 +209,16 @@ def tripPlanner():
     print("Trip Planner ")
     print("Disclaimer: Transfer time at interchanges are approximated to 4 minutes.\n If source or destination is interchange station, please select lines accordingly.")
     # Get Time
-    start_time = customTime(now)
+    startTime = customTime(now)
     # Source
     activeLineS, reqIndexs, sourceLine, _ = stationSelect(ask_direction=False)
     if reqIndexs == -1: return
     sourceStation = activeLineS[reqIndexs]["name"]
     
     # Destination
-    activeLineE, reqIndexE, endLine, _ = stationSelect(ask_direction=False)
-    if reqIndexE == -1: return
-    endStation = activeLineE[reqIndexE]["name"]
+    activeLineE, reqIndexD, endLine, _ = stationSelect(ask_direction=False)
+    if reqIndexD == -1: return
+    endStation = activeLineE[reqIndexD]["name"]
     
     # Map line names to data
     linesDict = {
@@ -263,7 +266,7 @@ def tripPlanner():
     sourceDirection = "1" if dir_str == "Down" else "2"
     
     sourceOffset = calcOffset(activeLineS, reqIndexs, sourceDirection)
-    nextMetroTimings = calcTimings(sourceOffset, start_time)
+    nextMetroTimings = calcTimings(sourceOffset, startTime)
 
     print("\nJourney Plan")
     print(f"Start from {sourceStation} ({sourceLine})")
@@ -376,7 +379,7 @@ def tripPlanner():
     else:
         # formatting time
         nm_time = datetime.strptime(nextMetroTimings[0], "%H:%M").time()
-        nm_dt = start_time.replace(hour=nm_time.hour, minute=nm_time.minute, second=0, microsecond=0)
+        nm_dt = startTime.replace(hour=nm_time.hour, minute=nm_time.minute, second=0, microsecond=0)
         
         arrival_time = nm_dt + timedelta(seconds=totalDuration)
         print(f"Arrive at {endStation} at {arrival_time.strftime('%H:%M')}")
@@ -390,10 +393,10 @@ if selected_mode == "1":
         stationName = activeLine[reqIndex]["name"]
         stationOffset = calcOffset(activeLine, reqIndex, direction)
         
-        print(f"Station: {stationName} on {stationLine} line.")
+        print(f"Station: {stationName} on {stationLine} line")
         # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
-        start_time = customTime(now)
-        timings = calcTimings(stationOffset, start_time)
+        startTime = customTime(now)
+        timings = calcTimings(stationOffset, startTime)
         
         if "Service" in timings[0]:
             print(timings[0])
