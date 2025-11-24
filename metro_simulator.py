@@ -170,11 +170,11 @@ def calcTravelTime(line_data, start_name, end_name):
     if start_idx < end_idx: 
         for i in range(start_idx + 1, end_idx + 1):
             total_time += line_data[i]["time"]
-        return total_time, "down"
+        return total_time, "Down"
     else: 
         for i in range(end_idx + 1, start_idx + 1):
             total_time += line_data[i]["time"]
-        return total_time, "up"
+        return total_time, "Up"
 
 def customTime(now):
     print("\nSelect Time Option:")
@@ -226,7 +226,10 @@ def tripPlanner():
         "Blue Branch": stationBlueBranch,
         "Magenta": stationMagenta
     }
-
+    # source and destination are the same
+    if sourceStation == endStation:
+        print("Source and Destination are the same. Travel time is 0.")
+        return
     #Direction for Source Line
     reqStation = endStation 
     
