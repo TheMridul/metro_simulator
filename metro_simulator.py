@@ -115,17 +115,17 @@ def calcOffset(activeLine, reqIndex, direction):
     return cumuSec
 
 #  timing logic 
-def calcTimings(offsetSec, start_time=now):
+def calcTimings(offsetSec, start_time):
     
     # service hours
-    serviceStart = now.replace(hour=SERVICE_START_HOUR, minute=0, second=0, microsecond=0)
-    serviceEnd = now.replace(hour=SERVICE_END_HOUR, minute=0, second=0, microsecond=0)
+    serviceStart = start_time.replace(hour=SERVICE_START_HOUR, minute=0, second=0, microsecond=0)
+    serviceEnd = start_time.replace(hour=SERVICE_END_HOUR, minute=0, second=0, microsecond=0)
     
     # offset adjusting
     firstArrival = serviceStart + timedelta(seconds=offsetSec)
     lastArrival = serviceEnd + timedelta(seconds=offsetSec)
     
-    if now > lastArrival:
+    if start_time > lastArrival:
         return ["No service available"]
         
     def getFreq(time):
@@ -136,11 +136,11 @@ def calcTimings(offsetSec, start_time=now):
             return 8
 
     # next metro afterr first arrival using changing frequencies
-    if now <= firstArrival:
+    if start_time <= firstArrival:
         nextMetro = firstArrival
     else:
         cur = firstArrival
-        while cur <= now:
+        while cur <= start_time:
             cur += timedelta(minutes=getFreq(cur))
         nextMetro = cur
 
@@ -176,7 +176,7 @@ def calcTravelTime(line_data, start_name, end_name):
             total_time += line_data[i]["time"]
         return total_time, "up"
 
-def customTime():
+def customTime(now):
     print("\nSelect Time Option:")
     print("1. Current Time")
     print("2. Custom Time")
@@ -187,7 +187,6 @@ def customTime():
         try:
             # custom time, assuming current date
             t = datetime.strptime(time_str, "%H:%M").time()
-            now = datetime.now()
             return now.replace(hour=t.hour, minute=t.minute, second=0, microsecond=0)
         except ValueError:
             print("Invalid time format. Using current time.")
@@ -207,7 +206,7 @@ def tripPlanner():
     print("Trip Planner ")
     print("Disclaimer: Transfer time at interchanges are approximated to 4 minutes.\n If source or destination is interchange station, please select lines accordingly.")
     # Get Time
-    start_time = customTime()
+    start_time = customTime(now)
     # Source
     activeLineS, reqIndexs, sourceLine, _ = stationSelect(ask_direction=False)
     if reqIndexs == -1: return
@@ -259,7 +258,7 @@ def tripPlanner():
             else:
                 reqStation = "Botanical Garden"
 
-    # Get direction to target
+    # Get direction to reqStation
     _, dir_str = calcTravelTime(linesDict[sourceLine], sourceStation, reqStation)
     sourceDirection = "1" if dir_str == "Down" else "2"
     
@@ -276,7 +275,7 @@ def tripPlanner():
         duration, _ = calcTravelTime(linesDict[sourceLine], sourceStation, endStation)
         totalDuration = duration
         print(f"Direct trip on {sourceLine} line.")
-        
+    
     elif (sourceLine == "Blue" and endLine == "Blue Branch") or (sourceLine == "Blue Branch" and endLine == "Blue"):
         # Transfer at Yamuna Bank
         interchange = "Yamuna Bank"
@@ -393,7 +392,7 @@ if selected_mode == "1":
         
         print(f"Station: {stationName} on {stationLine} line.")
         # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
-        start_time = customTime()
+        start_time = customTime(now)
         timings = calcTimings(stationOffset, start_time)
         
         if "Service" in timings[0]:
