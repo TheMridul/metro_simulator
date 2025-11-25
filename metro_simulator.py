@@ -79,8 +79,12 @@ def stationSelect(ask_direction=True):
         print(f" Select Direction ")
         print(f"1. Down: {startStation} -> {endStation}")
         print(f"2. Up:   {endStation} -> {startStation}")
-        
-        direction = input("Enter Direction (1 or 2): ").strip()
+        while True:
+            direction = input("Enter Direction (1 or 2): ").strip()
+            if direction in ("1", "2"):
+                break
+            print("Invalid input. Enter 1 or 2.")
+
     
     print(f" Stations on this Line ")
     for s in activeLine:
@@ -103,7 +107,7 @@ def calcOffset(activeLine, reqIndex, direction):
     # Time Offset
     cumuSec = 0
     # Down
-    if direction == "1":  
+    if str(direction) == "1":  # string or no.
         # Add time of all previous stations upto current
         for i in range(1, reqIndex + 1):
             cumuSec += activeLine[i]["time"]
@@ -189,8 +193,8 @@ def customTime(now):
             return now.replace(hour=t.hour, minute=t.minute, second=0, microsecond=0)
         except ValueError:
             print("Invalid time format. Using current time.")
-            return datetime.now()
-    return datetime.now()
+            return now
+    return now
 
 # mode selection
 def modeSelector():
@@ -233,51 +237,57 @@ def tripPlanner():
     reqStation = endStation 
     
     if sourceLine != endLine:
-        if sourceLine == "Blue Branch":
-            reqStation = "Yamuna Bank"
-        elif sourceLine == "Blue" and endLine == "Blue Branch":
-            reqStation = "Yamuna Bank"
-        elif (sourceLine == "Blue" and endLine == "Magenta") or (sourceLine == "Magenta" and endLine == "Blue"):
-            # If already at an interchange, use the other one
-            if sourceStation == "Janak Puri West":
-                reqStation = "Botanical Garden"
-            elif sourceStation == "Botanical Garden":
-                reqStation = "Janak Puri West"
-            else:
-                # Comparing JPW(janakpuri west) vs Botanical
-                t_jpw, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Janak Puri West")
-                t_jpw2, _ = calcTravelTime(linesDict[endLine], "Janak Puri West", endStation)
-                
-                t_bot, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Botanical Garden")
-                t_bot2, _ = calcTravelTime(linesDict[endLine], "Botanical Garden", endStation)
-                
-                if (t_jpw + t_jpw2) <= (t_bot + t_bot2):
+        interchanges = {"Janak Puri West", "Botanical Garden", "Yamuna Bank"}
+        if sourceStation in interchanges:
+            reqStation = sourceStation
+        elif endStation in interchanges:
+            reqStation = endStation
+        else:
+            if sourceLine == "Blue Branch":
+                reqStation = "Yamuna Bank"
+            elif sourceLine == "Blue" and endLine == "Blue Branch":
+                reqStation = "Yamuna Bank"
+            elif (sourceLine == "Blue" and endLine == "Magenta") or (sourceLine == "Magenta" and endLine == "Blue"):
+                # If already at an interchange, use the other one
+                if sourceStation == "Janak Puri West":
+                    reqStation = "Botanical Garden"
+                elif sourceStation == "Botanical Garden":
                     reqStation = "Janak Puri West"
                 else:
+                    # Comparing JPW(janakpuri west) vs Botanical
+                    t_jpw, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Janak Puri West")
+                    t_jpw2, _ = calcTravelTime(linesDict[endLine], "Janak Puri West", endStation)
+                    
+                    t_bot, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Botanical Garden")
+                    t_bot2, _ = calcTravelTime(linesDict[endLine], "Botanical Garden", endStation)
+                    
+                    if (t_jpw + t_jpw2) <= (t_bot + t_bot2):
+                        reqStation = "Janak Puri West"
+                    else:
+                        reqStation = "Botanical Garden"
+            elif sourceLine == "Magenta" and endLine == "Blue Branch":
+                # Magenta -- Blue -- Branch
+                # If already at an interchange, use the other one
+                if sourceStation == "Janak Puri West":
                     reqStation = "Botanical Garden"
-        elif sourceLine == "Magenta" and endLine == "Blue Branch":
-            # Magenta -- Blue -- Branch
-            # If already at an interchange, use the other one
-            if sourceStation == "Janak Puri West":
-                reqStation = "Botanical Garden"
-            elif sourceStation == "Botanical Garden":
-                reqStation = "Janak Puri West"
-            else:
-                t_jpw, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Janak Puri West")
-                t_blue_jpw, _ = calcTravelTime(linesDict["Blue"], "Janak Puri West", "Yamuna Bank")
-                
-                t_bot, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Botanical Garden")
-                t_blue_bot, _ = calcTravelTime(linesDict["Blue"], "Botanical Garden", "Yamuna Bank")
-                
-                # Remaining path from Yamuna Bank is same, so just compare to Yamuna Bank
-                if (t_jpw + t_blue_jpw) <= (t_bot + t_blue_bot):
+                elif sourceStation == "Botanical Garden":
                     reqStation = "Janak Puri West"
                 else:
-                    reqStation = "Botanical Garden"
+                    t_jpw, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Janak Puri West")
+                    t_blue_jpw, _ = calcTravelTime(linesDict["Blue"], "Janak Puri West", "Yamuna Bank")
+                    
+                    t_bot, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Botanical Garden")
+                    t_blue_bot, _ = calcTravelTime(linesDict["Blue"], "Botanical Garden", "Yamuna Bank")
+                    
+                    # Remaining path from Yamuna Bank is same, so just compare to Yamuna Bank
+                    if (t_jpw + t_blue_jpw) <= (t_bot + t_blue_bot):
+                        reqStation = "Janak Puri West"
+                    else:
+                        reqStation = "Botanical Garden"
 
     # Get direction to reqStation
     _, dir_str = calcTravelTime(linesDict[sourceLine], sourceStation, reqStation)
-    sourceDirection = dir_str
+    sourceDirection = str(dir_str)
     
     sourceOffset = calcOffset(activeLineS, reqIndexs, sourceDirection)
     nextMetroTimings = calcTimings(sourceOffset, startTime)
@@ -288,7 +298,14 @@ def tripPlanner():
 
     totalDuration = 0
     
-    if sourceLine == endLine:
+    # Check if destination is directly reachable on source line
+    is_direct = False
+    for s in linesDict[sourceLine]:
+        if s["name"] == endStation:
+            is_direct = True
+            break
+
+    if sourceLine == endLine or is_direct:
         duration, _ = calcTravelTime(linesDict[sourceLine], sourceStation, endStation)
         totalDuration = duration
         print(f"Direct trip on {sourceLine} line.")
@@ -300,8 +317,9 @@ def tripPlanner():
         t2, _ = calcTravelTime(linesDict[endLine], interchange, endStation)
         totalDuration = t1 + t2 + TRANSFER_TIME
         print(f"Take {sourceLine} to {interchange}")
-        print(f"Change to {endLine} (Wait 4 mins)")
+        print(f"Change to {endLine}")
         print(f"Take {endLine} to {endStation}")
+        print("(Transfer time of 4 mins is taken at each interchange)")
 
     elif (sourceLine == "Blue" and endLine == "Magenta") or (sourceLine == "Magenta" and endLine == "Blue"):
         # Transfer at Janak Puri West or Botanical Garden
@@ -335,8 +353,9 @@ def tripPlanner():
                 totalDuration = dist_b + TRANSFER_TIME
             
         print(f"Take {sourceLine} to {interchange}")
-        print(f"Change to {endLine} (Wait 4 mins)")
+        print(f"Change to {endLine}")
         print(f"Take {endLine} to {endStation}")
+        print("(Transfer time of 4 mins is taken at each interchange)")
 
     elif (sourceLine == "Magenta" and endLine == "Blue Branch") or (sourceLine == "Blue Branch" and endLine == "Magenta"):
         if sourceLine == "Magenta":
@@ -363,10 +382,11 @@ def tripPlanner():
                 totalDuration = total_b + (TRANSFER_TIME * 2)
             
             print(f"Take Magenta to {int1}")
-            print(f"Change to Blue Line (Wait 4 mins)")
+            print(f"Change to Blue Line")
             print(f"Take Blue Line to Yamuna Bank")
-            print(f"Change to Blue Branch (Wait 4 mins)")
+            print(f"Change to Blue Branch")
             print(f"Take Blue Branch to {endStation}")
+            print("(Transfer time of 4 mins is taken at each interchange)")
         # Branch to Magenta
         else: 
             b_station = sourceStation
@@ -392,10 +412,11 @@ def tripPlanner():
                 totalDuration = total_b + (TRANSFER_TIME * 2)
                 
             print(f"Take Blue Branch to Yamuna Bank")
-            print(f"Change to Blue Line (Wait 4 mins)")
+            print(f"Change to Blue Line ")
             print(f"Take Blue Line to {int2}")
-            print(f"Change to Magenta Line (Wait 4 mins)")
+            print(f"Change to Magenta Line ")
             print(f"Take Magenta to {endStation}")
+            print("(Transfer time of 4 mins is taken at each interchange)")
 
     else:
         print("Trip cannot be planned.")
@@ -412,25 +433,26 @@ def tripPlanner():
         print(f"Total time: {totalDuration // 60} min {totalDuration % 60} sec")
 
 
-selected_mode = modeSelector()
-if selected_mode == "1":
-    activeLine, reqIndex, stationLine, direction = stationSelect()
-    if reqIndex != -1:
-        stationName = activeLine[reqIndex]["name"]
-        stationOffset = calcOffset(activeLine, reqIndex, direction)
-        
-        print(f"Station: {stationName} on {stationLine} line")
-        # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
-        startTime = customTime(datetime.now())
-        timings = calcTimings(stationOffset, startTime)
-        
-        if "service" in timings[0]:
-            print(timings[0])
+if __name__ == "__main__":
+    selected_mode = modeSelector()
+    if selected_mode == "1":
+        activeLine, reqIndex, stationLine, direction = stationSelect()
+        if reqIndex != -1:
+            stationName = activeLine[reqIndex]["name"]
+            stationOffset = calcOffset(activeLine, reqIndex, direction)
+            
+            print(f"Station: {stationName} on {stationLine} line")
+            # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
+            startTime = customTime(datetime.now())
+            timings = calcTimings(stationOffset, startTime)
+            
+            if "service" in timings[0].lower():
+                print(timings[0])
+            else:
+                print(f"Next metro at {timings[0]}")
+                if len(timings) > 1:
+                    print("Subsequent metros at " + ", ".join(timings[1:]))
         else:
-            print(f"Next metro at {timings[0]}")
-            if len(timings) > 1:
-                print("Subsequent metros at " + ", ".join(timings[1:]))
+            print("Station not found.")
     else:
-        print("Station not found.")
-else:
-    tripPlanner()
+        tripPlanner()
