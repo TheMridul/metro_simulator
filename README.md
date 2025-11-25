@@ -12,6 +12,8 @@ A CLI tool that calculates next-metro timings and end-to-end trip planning acros
 - **Service Rules**: Handles operating windows and frequency variations (peak: 4 min, off-peak: 8 min).
 - **Custom Time Input**: Accepts user-defined start times.
 - **Auto-Correction**: Requests before 06:00 automatically return first metro at 06:00 + offset.
+- **Menu-Driven Interface**: User-friendly CLI prompts for seamless interaction.
+- **Custom time handling**: Users can specify custom start times for planning.
 
 ## Service Rules
 - **Operating Hours**: 06:00 to 23:00.
@@ -23,11 +25,6 @@ A CLI tool that calculates next-metro timings and end-to-end trip planning acros
 - **Interchange**: Wait time depends on availability of next train on destination line.
 
 ## Fare Calculation (Bonus Feature)
-- **Logic**: Rs. 10 for every 10 minutes (or part thereof) of travel time.
-- **Formula**: `ceil(Total Travel Time in Minutes / 10) * 10`.
-- **Example**:
-  - 0-10 mins -> Rs. 10
-  - 11-20 mins -> Rs. 20
 
 ## Data Source & Meta Data
 Station datasets and timing data are loaded from `metro_data.txt`.

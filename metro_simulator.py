@@ -4,9 +4,13 @@ TRANSFER_TIME = 0
 SERVICE_START_HOUR = 6
 SERVICE_END_HOUR = 23
 
-def calculateFare(minutes):
-    if minutes <= 0: return 0
-    return ((minutes + 9) // 10) * 10
+def calculateFare(distance):
+    if distance <= 2: return 11
+    elif distance <= 5: return 21
+    elif distance <= 12: return 32
+    elif distance <= 21: return 43
+    elif distance <= 32: return 54
+    else: return 64
 
 # reading data from filr
 def readSection(filename, start, end):
@@ -22,7 +26,6 @@ def readSection(filename, start, end):
             if end in line:
                 inSection = False
                 break
-
             if inSection:
                 # spliting to get req. data
                 if "|" in line and len(line) > 0 and line[0].isalnum():
@@ -31,7 +34,13 @@ def readSection(filename, start, end):
                         s_id = columns[0].strip()
                         stationName = columns[1].strip()
                         
-                        # time calc
+                        # distance calc
+                        dist_str = columns[2].strip()
+                        try:
+                            dist = float(dist_str)
+                        except ValueError:
+                            dist = 0.0
+
                         time = columns[3].strip()
                         s_time = 0
                         if ":" in time:
@@ -46,7 +55,8 @@ def readSection(filename, start, end):
                         stations.append({
                             "id": s_id, 
                             "name": stationName, 
-                            "time": s_time
+                            "time": s_time,
+                            "dist": dist
                         })
     return stations
 
@@ -193,17 +203,22 @@ def calcTravelTime(line_data, start_name, end_name):
             end_idx = i
             
     if start_idx == -1 or end_idx == -1:
-        return 0, ""
+        return 0, 0, ""
 
     total_time = 0
+    total_dist = 0.0
     if start_idx < end_idx: 
         for i in range(start_idx + 1, end_idx + 1):
             total_time += line_data[i]["time"]
-        return total_time, 1
+        
+        total_dist = abs(line_data[end_idx]["dist"] - line_data[start_idx]["dist"])
+        return total_time, total_dist, 1
     else: 
         for i in range(end_idx + 1, start_idx + 1):
             total_time += line_data[i]["time"]
-        return total_time, 2
+        
+        total_dist = abs(line_data[start_idx]["dist"] - line_data[end_idx]["dist"])
+        return total_time, total_dist, 2
 
 def customTime(now):
     print("\nSelect Time Option:")
@@ -287,13 +302,13 @@ def findRoute(sourceLine, sourceStation, endLine, endStation):
     # Blue - Magenta (Janak Puri West or Botanical Garden)
     if (sourceLine == "Blue" and endLine == "Magenta") or (sourceLine == "Magenta" and endLine == "Blue"):
         # via Janak Puri West
-        t1_a, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Janak Puri West")
-        t2_a, _ = calcTravelTime(linesDict[endLine], "Janak Puri West", endStation)
+        t1_a, _, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Janak Puri West")
+        t2_a, _, _ = calcTravelTime(linesDict[endLine], "Janak Puri West", endStation)
         dist_a = t1_a + t2_a
         
         # via Botanical Garden
-        t1_b, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Botanical Garden")
-        t2_b, _ = calcTravelTime(linesDict[endLine], "Botanical Garden", endStation)
+        t1_b, _, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Botanical Garden")
+        t2_b, _, _ = calcTravelTime(linesDict[endLine], "Botanical Garden", endStation)
         dist_b = t1_b + t2_b
         
         interchange = "Janak Puri West" if dist_a <= dist_b else "Botanical Garden"
@@ -306,12 +321,12 @@ def findRoute(sourceLine, sourceStation, endLine, endStation):
     # double transfer (Magenta - Blue Branch)
     if sourceLine == "Magenta" and endLine == "Blue Branch":
         # via Janak Puri West
-        t1_a, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Janak Puri West")
-        t2_a, _ = calcTravelTime(linesDict["Blue"], "Janak Puri West", "Yamuna Bank")
+        t1_a, _, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Janak Puri West")
+        t2_a, _, _ = calcTravelTime(linesDict["Blue"], "Janak Puri West", "Yamuna Bank")
         
         # via Botanical Garden
-        t1_b, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Botanical Garden")
-        t2_b, _ = calcTravelTime(linesDict["Blue"], "Botanical Garden", "Yamuna Bank")
+        t1_b, _, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Botanical Garden")
+        t2_b, _, _ = calcTravelTime(linesDict["Blue"], "Botanical Garden", "Yamuna Bank")
         
         interchange1 = "Janak Puri West" if (t1_a + t2_a) <= (t1_b + t2_b) else "Botanical Garden"
         
@@ -323,12 +338,12 @@ def findRoute(sourceLine, sourceStation, endLine, endStation):
         
     if sourceLine == "Blue Branch" and endLine == "Magenta":
         # via Janak Puri West
-        t2_a, _ = calcTravelTime(linesDict["Blue"], "Yamuna Bank", "Janak Puri West")
-        t3_a, _ = calcTravelTime(linesDict["Magenta"], "Janak Puri West", endStation)
+        t2_a, _, _ = calcTravelTime(linesDict["Blue"], "Yamuna Bank", "Janak Puri West")
+        t3_a, _, _ = calcTravelTime(linesDict["Magenta"], "Janak Puri West", endStation)
         
         # via Botanical Garden
-        t2_b, _ = calcTravelTime(linesDict["Blue"], "Yamuna Bank", "Botanical Garden")
-        t3_b, _ = calcTravelTime(linesDict["Magenta"], "Botanical Garden", endStation)
+        t2_b, _, _ = calcTravelTime(linesDict["Blue"], "Yamuna Bank", "Botanical Garden")
+        t3_b, _, _ = calcTravelTime(linesDict["Magenta"], "Botanical Garden", endStation)
         
         interchange2 = "Janak Puri West" if (t2_a + t3_a) <= (t2_b + t3_b) else "Botanical Garden"
         
@@ -349,6 +364,7 @@ def simulateJourney(segments, startTime):
     
     currentTime = startTime
     journeyStart = startTime
+    total_journey_dist = 0.0
     print("\nJourney Plan")
     print(f"Start Time: {startTime.strftime('%H:%M')}")
     
@@ -359,8 +375,9 @@ def simulateJourney(segments, startTime):
         lineData = linesDict[lineName]
         
         # direction
-        _, dirCode = calcTravelTime(lineData, sourceStation, desStation)
+        _, seg_dist, dirCode = calcTravelTime(lineData, sourceStation, desStation)
         directionStr = "1" if dirCode == 1 else "2"
+        total_journey_dist += seg_dist
         
         # start Index
         startIndex = -1
@@ -381,7 +398,7 @@ def simulateJourney(segments, startTime):
         
         if not timings or "service" in timings[0].lower() or "End of Service" in timings[0]:
             print(f"No service available on {lineName} from {sourceStation}")
-            return 0
+            return 0, 0
             
         # first timing to format 
         next_train_str = timings[0]
@@ -416,7 +433,7 @@ def simulateJourney(segments, startTime):
             
             currentTrainTime += timedelta(seconds=travel_time)
 
-            # ONLY print if it is the end station of the segment
+            # print if it is the end station of the segment
             if next_station_name == desStation:
                 print(f"Arrive {next_station_name}: {currentTrainTime.strftime('%H:%M')}")
             
@@ -429,8 +446,8 @@ def simulateJourney(segments, startTime):
     print(f"\nTotal travel time: {minutes} min {seconds} sec")
     
     # minutes (rounded up for fare calculation)
-    return (totalSeconds + 59) // 60
-
+    return (totalSeconds + 59) // 60, total_journey_dist
+    
 def tripPlanner():
     print("Trip Planner ")
     print("Disclaimer: Transfer time at interchanges as wait for next train.")
@@ -454,29 +471,30 @@ def tripPlanner():
     if not segments:
         print("Could not find a route.")
         return
-    total_minutes = simulateJourney(segments, startTime)
+    total_minutes, total_dist = simulateJourney(segments, startTime)
     if total_minutes:
-        fare = calculateFare(total_minutes)
+        fare = calculateFare(total_dist)
         print(f"Total Fare: Rs. {fare}")
 
-selected_mode = modeSelector()
-if selected_mode == "1":
-    activeLine, reqIndex, stationLine, direction = stationSelect()
-    if reqIndex != -1:
-        stationName = activeLine[reqIndex]["name"]
-        stationOffset = calcOffset(activeLine, reqIndex, direction)
-        
-        print(f"Station: {stationName} on {stationLine} line")
-        startTime = customTime(datetime.now())
-        timings = calcTimings(stationOffset, startTime)
-        
-        if "service" in timings[0].lower():
-            print(timings[0])
+if __name__ == "__main__":
+    selected_mode = modeSelector()
+    if selected_mode == "1":
+        activeLine, reqIndex, stationLine, direction = stationSelect()
+        if reqIndex != -1:
+            stationName = activeLine[reqIndex]["name"]
+            stationOffset = calcOffset(activeLine, reqIndex, direction)
+            
+            print(f"Station: {stationName} on {stationLine} line")
+            startTime = customTime(datetime.now())
+            timings = calcTimings(stationOffset, startTime)
+            
+            if "service" in timings[0].lower():
+                print(timings[0])
+            else:
+                print(f"Next metro at {timings[0]}")
+                if len(timings) > 1:
+                    print("Subsequent metros at " + ", ".join(timings[1:]))
         else:
-            print(f"Next metro at {timings[0]}")
-            if len(timings) > 1:
-                print("Subsequent metros at " + ", ".join(timings[1:]))
+            print("Station not found.")
     else:
-        print("Station not found.")
-else:
-    tripPlanner()
+        tripPlanner()
