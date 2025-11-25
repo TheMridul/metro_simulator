@@ -445,26 +445,25 @@ def tripPlanner():
         print(f"Total time: {totalDuration // 60} min {totalDuration % 60} sec")
 
 
-if __name__ == "__main__":
-    selected_mode = modeSelector()
-    if selected_mode == "1":
-        activeLine, reqIndex, stationLine, direction = stationSelect()
-        if reqIndex != -1:
-            stationName = activeLine[reqIndex]["name"]
-            stationOffset = calcOffset(activeLine, reqIndex, direction)
-            
-            print(f"Station: {stationName} on {stationLine} line")
-            # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
-            startTime = customTime(datetime.now())
-            timings = calcTimings(stationOffset, startTime)
-            
-            if "service" in timings[0].lower():
-                print(timings[0])
-            else:
-                print(f"Next metro at {timings[0]}")
-                if len(timings) > 1:
-                    print("Subsequent metros at " + ", ".join(timings[1:]))
+selected_mode = modeSelector()
+if selected_mode == "1":
+    activeLine, reqIndex, stationLine, direction = stationSelect()
+    if reqIndex != -1:
+        stationName = activeLine[reqIndex]["name"]
+        stationOffset = calcOffset(activeLine, reqIndex, direction)
+        
+        print(f"Station: {stationName} on {stationLine} line")
+        # print(f"{stationOffset // 60} min {stationOffset % 60} sec")
+        startTime = customTime(datetime.now())
+        timings = calcTimings(stationOffset, startTime)
+        
+        if "service" in timings[0].lower():
+            print(timings[0])
         else:
-            print("Station not found.")
+            print(f"Next metro at {timings[0]}")
+            if len(timings) > 1:
+                print("Subsequent metros at " + ", ".join(timings[1:]))
     else:
-        tripPlanner()
+        print("Station not found.")
+else:
+    tripPlanner()
