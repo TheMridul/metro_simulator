@@ -128,8 +128,8 @@ def calcTimings(offsetSec, startTime):
     firstArrival = serviceStart + timedelta(seconds=offsetSec)
     lastArrival = serviceEnd + timedelta(seconds=offsetSec)
     
-    #requested time is before service start
-    #so we return the first metro at 06:00 + offset 
+    
+    #the first metro at 06:00 + offset 
     if startTime < serviceStart:
         startTime = serviceStart
 
@@ -213,16 +213,13 @@ def modeSelector():
         print("Invalid choice. Defaulting to Metro Timings.")
         return "1"
 
-
-
-
 def findRoute(sourceLine, sourceStation, endLine, endStation):
     linesDict = {
         "Blue": stationBlueMain,
         "Blue Branch": stationBlueBranch,
         "Magenta": stationMagenta
     }
-    # Check if source is directly present on end line (same-named station on multiple lines)
+    # same-named station on multiple lines
     is_direct = False
     if sourceLine != endLine:
         for s in linesDict[endLine]:
@@ -233,26 +230,26 @@ def findRoute(sourceLine, sourceStation, endLine, endStation):
     if is_direct:
         return [{"line": sourceLine, "start": sourceStation, "end": endStation}]
 
-    # Symmetric check: if destination exists on the source line, treat as same-line trip
+    # destination exists on the source line
     if sourceLine != endLine:
         for s in linesDict[sourceLine]:
             if s["name"] == endStation:
-                # Destination is on the source line -- return a direct segment
+                # destination is on the source line -- give a direct segment
                 return [{"line": sourceLine, "start": sourceStation, "end": endStation}]
     
     # Same Line
     if sourceLine == endLine:
         return [{"line": sourceLine, "start": sourceStation, "end": endStation}]
         
-    # Case 2: Direct Transfer
-    # Blue <-> Blue Branch (Yamuna Bank)
+    #Direct Transfer
+    # Blue - Blue Branch (Yamuna Bank)
     if (sourceLine == "Blue" and endLine == "Blue Branch") or (sourceLine == "Blue Branch" and endLine == "Blue"):
         return [
             {"line": sourceLine, "start": sourceStation, "end": "Yamuna Bank"},
             {"line": endLine, "start": "Yamuna Bank", "end": endStation}
         ]
         
-    # Blue <-> Magenta (Janak Puri West or Botanical Garden)
+    # Blue - Magenta (Janak Puri West or Botanical Garden)
     if (sourceLine == "Blue" and endLine == "Magenta") or (sourceLine == "Magenta" and endLine == "Blue"):
         # via Janak Puri West
         t1_a, _ = calcTravelTime(linesDict[sourceLine], sourceStation, "Janak Puri West")
@@ -390,7 +387,7 @@ def simulateJourney(segments, startTime):
             
         currentTime = currentTrainTime
     
-    # Calculate and display total travel time
+    #total travel time
     totalSeconds = int((currentTime - journeyStart).total_seconds())
     minutes = totalSeconds // 60
     seconds = totalSeconds % 60
