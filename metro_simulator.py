@@ -56,7 +56,12 @@ def stationSelect(ask_direction=True):
     print("3. Magenta Line (Janak Puri West - Botanical Garden)")
     
     while True:
-        choice = input("Enter Choice (1-3): ").strip()
+        try:
+            choice = input("Enter Choice (1-3): ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\nInput cancelled.")
+            exit()
+
         if choice == "1":
             choice = "Blue"
             activeLine = stationBlueMain
@@ -188,7 +193,12 @@ def customTime(now):
     print("\nSelect Time Option:")
     print("1. Current Time")
     print("2. Custom Time")
-    choice = input("Enter Choice (1 or 2): ").strip()
+    try:
+        choice = input("Enter Choice (1 or 2): ").strip()
+    except:
+        print("\nInvalid input. Using current time.")
+        return now
+        
     
     if choice == "2":
         time_str = input("Enter time (HH:MM): ").strip()
@@ -418,25 +428,24 @@ def tripPlanner():
         return
     simulateJourney(segments, startTime)
 
-if __name__ == "__main__":
-    selected_mode = modeSelector()
-    if selected_mode == "1":
-        activeLine, reqIndex, stationLine, direction = stationSelect()
-        if reqIndex != -1:
-            stationName = activeLine[reqIndex]["name"]
-            stationOffset = calcOffset(activeLine, reqIndex, direction)
-            
-            print(f"Station: {stationName} on {stationLine} line")
-            startTime = customTime(datetime.now())
-            timings = calcTimings(stationOffset, startTime)
-            
-            if "service" in timings[0].lower():
-                print(timings[0])
-            else:
-                print(f"Next metro at {timings[0]}")
-                if len(timings) > 1:
-                    print("Subsequent metros at " + ", ".join(timings[1:]))
+selected_mode = modeSelector()
+if selected_mode == "1":
+    activeLine, reqIndex, stationLine, direction = stationSelect()
+    if reqIndex != -1:
+        stationName = activeLine[reqIndex]["name"]
+        stationOffset = calcOffset(activeLine, reqIndex, direction)
+        
+        print(f"Station: {stationName} on {stationLine} line")
+        startTime = customTime(datetime.now())
+        timings = calcTimings(stationOffset, startTime)
+        
+        if "service" in timings[0].lower():
+            print(timings[0])
         else:
-            print("Station not found.")
+            print(f"Next metro at {timings[0]}")
+            if len(timings) > 1:
+                print("Subsequent metros at " + ", ".join(timings[1:]))
     else:
-        tripPlanner()
+        print("Station not found.")
+else:
+    tripPlanner()

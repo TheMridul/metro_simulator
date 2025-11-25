@@ -96,3 +96,6 @@ README.md
 - Peak-hour frequency (4 min) applies during 08:00–10:00 and 17:00–19:00; 8 min otherwise.
 - The trip planner detects when source or destination stations exist on multiple lines and optimizes routing to avoid unnecessary transfers.
 - Station names are case-sensitive; keep them consistent across sections in `metro_data.txt`.
+
+By Mridul Surana
+2025319
