@@ -22,6 +22,13 @@ A CLI tool that calculates next-metro timings and end-to-end trip planning acros
   - Normal hours (06:00–23:00 except peak): 8 minutes.
 - **Interchange**: Wait time depends on availability of next train on destination line.
 
+## Fare Calculation (Bonus Feature)
+- **Logic**: Rs. 10 for every 10 minutes (or part thereof) of travel time.
+- **Formula**: `ceil(Total Travel Time in Minutes / 10) * 10`.
+- **Example**:
+  - 0-10 mins -> Rs. 10
+  - 11-20 mins -> Rs. 20
+
 ## Data Source & Meta Data
 Station datasets and timing data are loaded from `metro_data.txt`.
 The file uses pipe-separated rows inside named line sections. Expected columns:
@@ -74,12 +81,13 @@ python metro_simulator.py
 ## Example Output
 ```
 Journey Plan
-Start Time: 09:46
-Board Blue at Dwarka Sector 21: 09:48
-  Arrive Janak Puri West: 10:52
-Transfer at Janak Puri West ... Ready at 10:52
-Board Magenta at Janak Puri West: 10:55
-  Arrive Botanical Garden: 12:01
+Start Time: 11:15
+Next metro from Dwarka Sector 21: 11:20
+Board Blue at Dwarka Sector 21: 11:20
+Arrive Dwarka Sector 10: 11:27
+
+Total travel time: 12 min 23 sec
+Total Fare: Rs. 20
 ```
 
 ## File Layout
@@ -97,5 +105,4 @@ README.md
 - The trip planner detects when source or destination stations exist on multiple lines and optimizes routing to avoid unnecessary transfers.
 - Station names are case-sensitive; keep them consistent across sections in `metro_data.txt`.
 
-By Mridul Surana
-2025319
+By Mridul Surana 2025319

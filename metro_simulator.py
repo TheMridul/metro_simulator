@@ -1,7 +1,13 @@
 from datetime import datetime,timedelta
+
 TRANSFER_TIME = 0  
 SERVICE_START_HOUR = 6
 SERVICE_END_HOUR = 23
+
+def calculateFare(minutes):
+    if minutes <= 0: return 0
+    return ((minutes + 9) // 10) * 10
+
 # reading data from filr
 def readSection(filename, start, end):
     stations = []
@@ -85,7 +91,12 @@ def stationSelect(ask_direction=True):
         print(f"1. Down: {startStation} -> {endStation}")
         print(f"2. Up:   {endStation} -> {startStation}")
         while True:
-            direction = input("Enter Direction (1 or 2): ").strip()
+            try:
+                direction = input("Enter Direction (1 or 2): ").strip()
+            except (KeyboardInterrupt, EOFError):
+                print("\nInput cancelled.")
+                exit()
+            
             if direction in ("1", "2"):
                 break
             print("Invalid input. Enter 1 or 2.")
@@ -95,7 +106,12 @@ def stationSelect(ask_direction=True):
     for s in activeLine:
         print(f'{s["id"]}: {s["name"]}')
     
-    targetID = input("Enter your Station ID (e.g., 1b): ").strip().lower()
+    try:
+        targetID = input("Enter your Station ID (e.g., 1b): ").strip().lower()
+    except (KeyboardInterrupt, EOFError):
+        print("\nInput cancelled.")
+        exit()
+
     # index of the selected station
     reqIndex = -1
     for idx, s in enumerate(activeLine):
@@ -195,13 +211,17 @@ def customTime(now):
     print("2. Custom Time")
     try:
         choice = input("Enter Choice (1 or 2): ").strip()
-    except:
-        print("\nInvalid input. Using current time.")
-        return now
-        
+    except (KeyboardInterrupt, EOFError):
+        print("\nInput cancelled.")
+        exit()
     
     if choice == "2":
-        time_str = input("Enter time (HH:MM): ").strip()
+        try:
+            time_str = input("Enter time (HH:MM): ").strip()
+        except (KeyboardInterrupt, EOFError):
+            print("\nInput cancelled.")
+            exit()
+
         try:
             # custom time, assuming current date
             t = datetime.strptime(time_str, "%H:%M").time()
@@ -216,7 +236,12 @@ def modeSelector():
     print()
     print("Welcome to Delhi Metro Simulator")
     print("Select Mode:")
-    mode= input("Enter 1 for Metro Timings, 2 for Trip Planner: ").strip()
+    try:
+        mode= input("Enter 1 for Metro Timings, 2 for Trip Planner: ").strip()
+    except (KeyboardInterrupt, EOFError):
+        print("\nInput cancelled.")
+        exit()
+
     if mode in ["1", "2"]:
         return mode
     else:
@@ -356,7 +381,7 @@ def simulateJourney(segments, startTime):
         
         if not timings or "service" in timings[0].lower() or "End of Service" in timings[0]:
             print(f"No service available on {lineName} from {sourceStation}")
-            return
+            return 0
             
         # first timing to format 
         next_train_str = timings[0]
@@ -402,6 +427,9 @@ def simulateJourney(segments, startTime):
     minutes = totalSeconds // 60
     seconds = totalSeconds % 60
     print(f"\nTotal travel time: {minutes} min {seconds} sec")
+    
+    # minutes (rounded up for fare calculation)
+    return (totalSeconds + 59) // 60
 
 def tripPlanner():
     print("Trip Planner ")
@@ -426,7 +454,10 @@ def tripPlanner():
     if not segments:
         print("Could not find a route.")
         return
-    simulateJourney(segments, startTime)
+    total_minutes = simulateJourney(segments, startTime)
+    if total_minutes:
+        fare = calculateFare(total_minutes)
+        print(f"Total Fare: Rs. {fare}")
 
 selected_mode = modeSelector()
 if selected_mode == "1":
