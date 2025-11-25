@@ -211,19 +211,19 @@ def modeSelector():
 def tripPlanner():
     print("Trip Planner ")
     print("Disclaimer: Transfer time at interchanges are approximated to 4 minutes.\n If source or destination is interchange station, please select lines accordingly.")
-    # Get Time
+    # time selection
     startTime = customTime(datetime.now())
-    # Source
+    # source selection
     activeLineS, reqIndexs, sourceLine, _ = stationSelect(ask_direction=False)
     if reqIndexs == -1: return
     sourceStation = activeLineS[reqIndexs]["name"]
     
-    # Destination
+    # Destination selection
     activeLineE, reqIndexD, endLine, _ = stationSelect(ask_direction=False)
     if reqIndexD == -1: return
     endStation = activeLineE[reqIndexD]["name"]
     
-    # Map line names to data
+    # lines - dictionary
     linesDict = {
         "Blue": stationBlueMain,
         "Blue Branch": stationBlueBranch,
@@ -279,13 +279,13 @@ def tripPlanner():
                     t_bot, _ = calcTravelTime(linesDict["Magenta"], sourceStation, "Botanical Garden")
                     t_blue_bot, _ = calcTravelTime(linesDict["Blue"], "Botanical Garden", "Yamuna Bank")
                     
-                    # Remaining path from Yamuna Bank is same, so just compare to Yamuna Bank
+                    # Remaining path from Yamuna Bank is same, so just YB
                     if (t_jpw + t_blue_jpw) <= (t_bot + t_blue_bot):
                         reqStation = "Janak Puri West"
                     else:
                         reqStation = "Botanical Garden"
 
-    # Get direction to reqStation
+    # direction to reqStation
     _, dir_str = calcTravelTime(linesDict[sourceLine], sourceStation, reqStation)
     sourceDirection = str(dir_str)
     
@@ -298,12 +298,20 @@ def tripPlanner():
 
     totalDuration = 0
     
-    # Check if destination is directly reachable on source line
+    # destination is directly on source line
     is_direct = False
     for s in linesDict[sourceLine]:
         if s["name"] == endStation:
             is_direct = True
             break
+            
+    # source is directly on end line
+    if not is_direct:
+        for s in linesDict[endLine]:
+            if s["name"] == sourceStation:
+                is_direct = True
+                sourceLine = endLine
+                break
 
     if sourceLine == endLine or is_direct:
         duration, _ = calcTravelTime(linesDict[sourceLine], sourceStation, endStation)
@@ -381,13 +389,17 @@ def tripPlanner():
                 int1 = "Botanical Garden"
                 totalDuration = total_b + (TRANSFER_TIME * 2)
             
-            print(f"Take Magenta to {int1}")
+            if sourceStation != int1:
+                print(f"Take Magenta to {int1}")
             print(f"Change to Blue Line")
             print(f"Take Blue Line to Yamuna Bank")
-            print(f"Change to Blue Branch")
-            print(f"Take Blue Branch to {endStation}")
+            if endStation != "Yamuna Bank":
+                print(f"Change to Blue Branch")
+                print(f"Take Blue Branch to {endStation}")
+            else:
+                print("Arrive at Yamuna Bank (Blue Branch)")
             print("(Transfer time of 4 mins is taken at each interchange)")
-        # Branch to Magenta
+        # branch to magenta
         else: 
             b_station = sourceStation
             m_station = endStation
@@ -399,7 +411,7 @@ def tripPlanner():
             t2_a, _ = calcTravelTime(linesDict["Blue"], "Yamuna Bank", "Janak Puri West")
             t3_a, _ = calcTravelTime(m_line, "Janak Puri West", m_station)
             total_a = t1 + t2_a + t3_a
-            
+
             t2_b, _ = calcTravelTime(linesDict["Blue"], "Yamuna Bank", "Botanical Garden")
             t3_b, _ = calcTravelTime(m_line, "Botanical Garden", m_station)
             total_b = t1 + t2_b + t3_b
